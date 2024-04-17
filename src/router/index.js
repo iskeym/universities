@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import UniversityList from '@/views/UniversityList.vue'
+import Favourites from '@/views/Favourites.vue'
 
 const routes = [
   {
@@ -7,7 +8,8 @@ const routes = [
     component: UniversityList
   },
   {
-
+    path: '/favourites',
+    component: Favourites
   }
 ]
 
