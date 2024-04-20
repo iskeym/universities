@@ -5,6 +5,7 @@
     <ul v-else>
       <li v-for="(university, index) in paginatedUniversities" :key="index">
         <a :href="university.web_pages[0]">{{ university.name }}</a>
+        <HeartBtn @add-to-favorites="addToFavorites(university)"/>
       </li>
       <div>
         <button v-for="page in displayedPages" :key="page" @click="changePage(page)" :disabled="page === currentPage">
@@ -17,11 +18,13 @@
 
 <script>
 import axios from 'axios';
-import Filter from '@/components/Filter.vue'
+import Filter from '@/components/Filter.vue';
+import HeartBtn from '@/components/UI/HeartBtn.vue';
 
 export default {
   components: {
-    Filter
+    Filter,
+    HeartBtn
   },
   data() {
     return {
@@ -31,6 +34,7 @@ export default {
       itemsPerPage: 10,
       countries: [],
       country: '',
+      favourited: false
     };
   },
   computed: {
@@ -68,6 +72,19 @@ export default {
     }
   },
   methods: {
+    addToFavorites(university) {
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const universityId = university.name;
+      const index = favorites.findIndex(item => item.id === universityId);
+      
+      if (index === -1) {
+        favorites.push(university);
+      } else {
+        favorites.splice(index, 1);
+      }
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      console.log(favorites);
+    },
     async changePage(page) {
       this.loading = true;
       try {
