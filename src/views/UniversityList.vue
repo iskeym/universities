@@ -5,7 +5,7 @@
     <ul v-else>
       <li v-for="(university, index) in paginatedUniversities" :key="index">
         <a :href="university.web_pages[0]">{{ university.name }}</a>
-        <HeartBtn @add-to-favorites="addToFavorites(university)"/>
+        <HeartBtn :isFavorite="checkFavorite(university)" @add-to-favorites="addToFavorites(university)"/>
       </li>
       <div>
         <button v-for="page in displayedPages" :key="page" @click="changePage(page)" :disabled="page === currentPage">
@@ -33,8 +33,7 @@ export default {
       currentPage: 1,
       itemsPerPage: 10,
       countries: [],
-      country: '',
-      favourited: false
+      country: ''
     };
   },
   computed: {
@@ -72,16 +71,26 @@ export default {
     }
   },
   methods: {
+    checkFavorite(university) {
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const index = favorites.findIndex(item => item.name === university.name);
+      
+      if (index !== -1) {
+        return true
+      } else {
+        return false
+      }
+    },
     addToFavorites(university) {
       let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      const universityId = university.name;
-      const index = favorites.findIndex(item => item.id === universityId);
+      const index = favorites.findIndex(item => item.name === university.name);
       
-      if (index === -1) {
-        favorites.push(university);
-      } else {
+      if (index !== -1) {
         favorites.splice(index, 1);
+      } else {
+        favorites.push(university);
       }
+
       localStorage.setItem('favorites', JSON.stringify(favorites));
       console.log(favorites);
     },

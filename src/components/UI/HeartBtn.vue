@@ -1,57 +1,28 @@
-<!-- <template>
-    <button :class="{ green: isFavorite }" @click="addToFavorites">
-        <font-awesome-icon :icon="['far', 'heart']" />
-        <font-awesome-icon :icon="['fas', 'heart']" />
-    </button>
+<template>
+  <button @click="toggleFavorite">
+      <font-awesome-icon v-if="localIsFavorite == false" :icon="['far', 'heart']" />
+      <font-awesome-icon v-else :icon="['fas', 'heart']" />
+  </button>
 </template>
 
 <script>
 export default {
-  props: ['university'],
-  computed: {
-    isFavorite() {
-      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      return favorites.includes(this.university);
-    }
+  props: {
+      isFavorite: {
+          type: Boolean,
+          default: false
+      }
+  },
+  data() {
+      return {
+          localIsFavorite: this.isFavorite
+      };
   },
   methods: {
-    addToFavorites() {
-      this.$emit('add-to-favorites', this.university);
-    }
+      toggleFavorite() {
+          this.$emit('add-to-favorites', this.university);
+          this.localIsFavorite = !this.localIsFavorite;
+      }
   }
 };
 </script>
-
-<style>
-.green {
-  background-color: green;
-}
-</style> -->
-
-<template>
-    <button :class="{ green: isFavorite }" @click="addToFavorites">Add to Favorites</button>
-  </template>
-  
-  <script>
-  export default {
-    props: ['university'],
-    computed: {
-      isFavorite() {
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        return favorites.includes(this.university);
-      }
-    },
-    methods: {
-      addToFavorites() {
-        this.$emit('add-to-favorites', this.university);
-      }
-    }
-  };
-  </script>
-  
-  <style>
-  .green {
-    background-color: green;
-  }
-  </style>
-  
