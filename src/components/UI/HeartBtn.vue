@@ -11,7 +11,7 @@ export default {
       isFavorite: {
           type: Boolean,
           default: false
-      }
+      },
   },
   data() {
       return {
@@ -20,7 +20,7 @@ export default {
   },
   methods: {
       toggleFavorite() {
-          this.$emit('add-to-favorites', this.university);
+          this.$emit('toggleFavorite', this.university);
           this.localIsFavorite = !this.localIsFavorite;
       }
   }
